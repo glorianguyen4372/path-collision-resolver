@@ -54,3 +54,10 @@ The trade-off: the library does not atomically reserve the name it returns. Betw
 - **Extension splitting uses the last dot.** `archive.tar.gz` becomes base `archive.tar`, ext `.gz`, so a collision yields `archive.tar.gz~1` — the `.gz` stays visible. A leading-dot file like `.gitignore` is treated as having no extension, so its decorated form is `.gitignore~1`.
 - **The numeric resolver does not scan for existing `name~N` siblings.** If some other tool already created `name~5`, this library will still return `name~1` for a collision on `name`, because it only asks `exists` about the candidates it generates itself. If you need to honour pre-existing numbered siblings, feed an `exists` that knows about them, or scan the directory first.
 - **The timestamp clock is not advanced for you across concurrent calls.** Two calls sharing the same clock object will produce the same candidate on the same tick. For serial use that is fine; for parallel use, either advance the clock between calls or fall back to the numeric strategy, which is stateless by construction.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
