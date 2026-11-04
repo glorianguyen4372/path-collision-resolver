@@ -1,6 +1,6 @@
 {
   "name": "path-collision-resolver",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Generates non-clobbering filenames by appending numeric or timestamp suffixes when target paths exist.",
   "type": "module",
   "main": "src/index.js",
